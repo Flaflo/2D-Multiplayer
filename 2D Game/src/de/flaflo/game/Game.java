@@ -28,8 +28,6 @@ public class Game extends JPanel {
 	public static final int PORT = 1338;
 	public static final String IP = "localhost";
 	
-	private boolean isInMultiplayer = false;
-	
 	/**
 	 * Serialisierungs ID
 	 */
@@ -111,13 +109,5 @@ public class Game extends JPanel {
 	
 	public Player getPlayer() {
 		return player;
-	}
-
-	public boolean isInMultiplayer() {
-		return isInMultiplayer;
-	}
-
-	public void setInMultiplayer(boolean isInMultiplayer) {
-		this.isInMultiplayer = isInMultiplayer;
 	}
 }
