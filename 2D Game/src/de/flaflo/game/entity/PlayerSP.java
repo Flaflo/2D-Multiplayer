@@ -4,10 +4,9 @@ import java.awt.Color;
 import java.awt.event.KeyEvent;
 
 import de.flaflo.game.Game;
-import de.flaflo.game.input.IKeyListener;
 import de.flaflo.game.input.Keyboard;
 
-public class PlayerSP extends Player implements IKeyListener {
+public class PlayerSP extends Player {
 
 	public static String PLAYER_NAME = "Randy" + Math.abs(Game.RANDOM.nextInt());
 	
@@ -15,41 +14,24 @@ public class PlayerSP extends Player implements IKeyListener {
 	
 	public PlayerSP(String name, Color color, int x, int y, int width, int height) {
 		super(name, color, x, y, width, height);
-		
-		Keyboard.registerListener(this);
-	}
-
-	@Override
-	public void onKeyPressed(KeyEvent e) {
-		tryMove(e.getKeyCode());
-	}
-
-	@Override
-	public void onKeyReleased(KeyEvent e) {
-		tryMove(e.getKeyCode());
-	}
-
-	@Override
-	public void onKeyTyped(KeyEvent e) {
-		tryMove(e.getKeyCode());
-		
 	}
 	
-	private void tryMove(int key) {
-		switch (key) {
-		case KeyEvent.VK_W:
+	@Override
+	public void render() {
+		super.render();
+		
+		tryMove();
+	}
+	
+	private void tryMove() {
+		if (Keyboard.isKeyPressed(KeyEvent.VK_W))
 			this.setY(this.getY() - MOVEMENT_SPEED);
-			break;
-		case KeyEvent.VK_S:
+		if (Keyboard.isKeyPressed(KeyEvent.VK_S))
 			this.setY(this.getY() + MOVEMENT_SPEED);
-			break;
-		case KeyEvent.VK_A:
+		if (Keyboard.isKeyPressed(KeyEvent.VK_A))
 			this.setX(this.getX() - MOVEMENT_SPEED);
-			break;
-		case KeyEvent.VK_D:
+		if (Keyboard.isKeyPressed(KeyEvent.VK_D))
 			this.setX(this.getX() + MOVEMENT_SPEED);
-			break;
-		}
 	}
 
 }

@@ -32,6 +32,11 @@ public class Main {
 		PlayerSP.PLAYER_NAME = JOptionPane.showInputDialog("Wähle einen Spielernamen: ",
 				"Randy" + Math.abs(Game.RANDOM.nextInt()));
 
+		if (PlayerSP.PLAYER_NAME.length() > 24) {
+			initWindow();
+			return;
+		}
+		
 		if (PlayerSP.PLAYER_NAME == null)
 			System.exit(0);
 
