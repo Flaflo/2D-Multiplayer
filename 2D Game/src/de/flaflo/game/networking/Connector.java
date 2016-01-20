@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import javax.swing.JOptionPane;
+
 import de.flaflo.game.Game;
 import de.flaflo.game.entity.Player;
 import de.flaflo.game.entity.PlayerMP;
@@ -111,7 +113,8 @@ public class Connector implements Runnable {
 				}
 				
 			} catch (IOException e) {
-				e.printStackTrace();
+				JOptionPane.showMessageDialog(null, "Verbindung wurde vom Host getrennt");
+				System.exit(0);
 			}
 		}
 	}
