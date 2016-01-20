@@ -11,6 +11,7 @@ import de.flaflo.game.Game;
 import de.flaflo.game.entity.Player;
 import de.flaflo.game.entity.PlayerMP;
 import de.flaflo.game.entity.PlayerSP;
+import de.flaflo.game.main.Main;
 
 /**
  * TODO
@@ -86,11 +87,13 @@ public class Connector implements Runnable {
 						
 						Game.getGame().spawnPlayer(new PlayerMP(toAddName, new Color(toAddRed, toAddGreen, toAddBlue), toAddX, toAddY, Player.PLAYER_WIDTH, Player.PLAYER_HEIGHT));
 						
+						Main.log(toAddName + " hat das Spiel betreten.");
 						break;
 					case "removePlayer":
 						String toRemoveName = in.readUTF();
 						Game.getGame().despawnPlayer(Game.getGame().getPlayerByName(toRemoveName));
 						
+						Main.log(toRemoveName + " hat das Spiel verlassen.");
 						break;
 					case "posUpdate":
 						String toUpdateName = in.readUTF();
@@ -116,6 +119,8 @@ public class Connector implements Runnable {
 	public synchronized void connect() throws UnknownHostException, IOException {
 		if (isRunning)
 			return;
+		
+		Main.log("Verbinde auf " + ip + ":" + port);
 
 		if (socket == null)
 			socket = new Socket(ip, port);
@@ -149,6 +154,8 @@ public class Connector implements Runnable {
 		
 		innerThread.start();
 		posUpdateThread.start();
+		
+		Main.log("Erfolgreich verbunden.");
 	}
 	
 	public synchronized void disconnect() {
