@@ -3,11 +3,14 @@ package de.flaflo.game.entity;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 
+import de.flaflo.game.Game;
 import de.flaflo.game.input.IKeyListener;
 import de.flaflo.game.input.Keyboard;
 
 public class PlayerSP extends Player implements IKeyListener {
 
+	public static String PLAYER_NAME = "Randy" + Math.abs(Game.RANDOM.nextInt());
+	
 	public static final int MOVEMENT_SPEED = 2;
 	
 	public PlayerSP(String name, Color color, int x, int y, int width, int height) {

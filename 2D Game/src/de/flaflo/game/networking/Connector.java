@@ -1,5 +1,6 @@
 package de.flaflo.game.networking;
 
+import java.awt.Color;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -9,9 +10,14 @@ import java.net.UnknownHostException;
 import de.flaflo.game.Game;
 import de.flaflo.game.entity.Player;
 import de.flaflo.game.entity.PlayerMP;
+import de.flaflo.game.entity.PlayerSP;
 
 /**
- * 
+ * TODO
+ * </br>
+ * • Implement the Packet System here
+ * </br>
+ * • Implement Player IDs
  * @author Flaflo
  *
  */
@@ -70,26 +76,34 @@ public class Connector implements Runnable {
 				
 				switch (desire) {
 					case "addPlayer":
-						String name = in.readUTF();
-						int x = in.readInt();
-						int y = in .readInt();
+						String toAddName = in.readUTF();
+						int toAddX = in.readInt();
+						int toAddY = in .readInt();
 						
-						Game.getGame().spawnPlayer(new PlayerMP(name, Player.PLAYER_COLOR, x, y, Player.PLAYER_WIDTH, Player.PLAYER_HEIGHT));
+						int toAddRed = in.readInt();
+						int toAddGreen = in.readInt();
+						int toAddBlue = in.readInt();
+						
+						Game.getGame().spawnPlayer(new PlayerMP(toAddName, new Color(toAddRed, toAddGreen, toAddBlue), toAddX, toAddY, Player.PLAYER_WIDTH, Player.PLAYER_HEIGHT));
+						
+						break;
+					case "removePlayer":
+						String toRemoveName = in.readUTF();
+						Game.getGame().despawnPlayer(Game.getGame().getPlayerByName(toRemoveName));
 						
 						break;
 					case "posUpdate":
+						String toUpdateName = in.readUTF();
+						int toUpdateX = in.readInt();
+						int toUpdateY = in.readInt();
 						
-						String recName = in.readUTF();
-						int rx = in.readInt();
-						int ry = in.readInt();
+						PlayerMP playerToUpdate = Game.getGame().getPlayerByName(toUpdateName);
 						
-						for (PlayerMP p : Game.getGame().getPlayers()) {
-							if (p.getName().equals(recName)) {
-								p.setX(rx);
-								p.setY(ry);
-							}
+						if (playerToUpdate != null) {
+							playerToUpdate.setX(toUpdateX);
+							playerToUpdate.setY(toUpdateY);
 						}
-							
+						
 						break;
 				}
 				
@@ -109,9 +123,15 @@ public class Connector implements Runnable {
 		DataInputStream in = new DataInputStream(socket.getInputStream());
 		DataOutputStream out = new DataOutputStream(socket.getOutputStream());
 
-		out.writeUTF(Game.PLAYER_NAME);
+		out.writeUTF(PlayerSP.PLAYER_NAME);
 		out.writeInt(Game.getGame().getPlayer().getX());
 		out.writeInt(Game.getGame().getPlayer().getY());
+		
+		Color color = PlayerSP.PLAYER_COLOR;
+		
+		out.writeInt(color.getRed());
+		out.writeInt(color.getGreen());
+		out.writeInt(color.getBlue());
 
 		int size = in.readInt();
 
@@ -120,7 +140,11 @@ public class Connector implements Runnable {
 			int pX = in.readInt();
 			int pY = in.readInt();
 			
-			Game.getGame().spawnPlayer(new PlayerMP(pName, Player.PLAYER_COLOR, pX, pY, Player.PLAYER_WIDTH, Player.PLAYER_HEIGHT));
+			int cRed = in.readInt();
+			int cGreen = in.readInt();
+			int cBlue = in.readInt();
+			
+			Game.getGame().spawnPlayer(new PlayerMP(pName, new Color(cRed, cGreen, cBlue), pX, pY, Player.PLAYER_WIDTH, Player.PLAYER_HEIGHT));
 		}
 		
 		innerThread.start();

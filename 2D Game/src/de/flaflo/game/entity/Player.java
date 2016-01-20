@@ -9,7 +9,7 @@ public abstract class Player {
 	public static final int PLAYER_WIDTH = 12;
 	public static final int PLAYER_HEIGHT = 12;
 	
-	public static final Color PLAYER_COLOR = Color.GREEN;
+	public static Color PLAYER_COLOR = Color.GREEN;
 	
 	private Color color;
 
@@ -17,6 +17,14 @@ public abstract class Player {
 	
 	private int x, y, width, height;
 	
+	/**
+	 * @param name Name, der über dem Spieler angezeigt wird
+	 * @param color
+	 * @param x
+	 * @param y
+	 * @param width
+	 * @param height
+	 */
 	public Player(String name, Color color, int x, int y, int width, int height) {
 		this.name = name;
 		this.color = color;
@@ -26,6 +34,9 @@ public abstract class Player {
 		this.height = height;
 	}
 
+	/**
+	 * Rendert den Spieler auf den Screen
+	 */
 	public void render() {
 		RenderHelper.drawRect(x, y, width, height, color);
 		RenderHelper.drawOutlineRect(x, y, width - 1, height - 1, color.darker());
