@@ -26,8 +26,8 @@ public class Game extends JPanel {
 
 	public static final Random RANDOM = new Random();
 
-	public static final int PORT = 1338;
-	public static final String IP = "ncp.poltergeistclient.de";
+	public static int PORT = 1338;
+	public static String IP = "ncp.poltergeistclient.de";
 
 	/**
 	 * Serialisierungs ID
