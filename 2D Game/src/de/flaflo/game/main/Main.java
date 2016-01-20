@@ -41,9 +41,6 @@ public class Main {
 			}
 		}
 
-		// PlayerSP.PLAYER_COLOR = JColorChooser.showDialog(null, "Wähle deine
-		// Spieler Farbe", Color.GREEN);
-
 		if (PlayerSP.PLAYER_COLOR == null) {
 			initWindow();
 			return;
