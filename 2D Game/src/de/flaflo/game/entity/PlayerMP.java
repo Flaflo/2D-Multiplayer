@@ -6,7 +6,6 @@ public class PlayerMP extends Player {
 
 	public static final int EXPECTED_MOVEMENT_SPEED = PlayerSP.MOVEMENT_SPEED;
 
-	private int lastPosX, lastPosY;
 	private int polPosX, polPosY;
 
 	private boolean isMoving;
@@ -72,35 +71,5 @@ public class PlayerMP extends Player {
 	 */
 	public void setPolPosY(int polPosY) {
 		this.polPosY = polPosY;
-	}
-
-	/**
-	 * @return the lastPosX
-	 */
-	public int getLastPosX() {
-		return lastPosX;
-	}
-
-	/**
-	 * @param lastPosX
-	 *            the lastPosX to set
-	 */
-	public void setLastPosX(int lastPosX) {
-		this.lastPosX = lastPosX;
-	}
-
-	/**
-	 * @return the lastPosY
-	 */
-	public int getLastPosY() {
-		return lastPosY;
-	}
-
-	/**
-	 * @param lastPosY
-	 *            the lastPosY to set
-	 */
-	public void setLastPosY(int lastPosY) {
-		this.lastPosY = lastPosY;
 	}
 }
