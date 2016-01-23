@@ -5,25 +5,27 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import de.flaflo.game.Game;
-
 public class C01PacketLogin extends Packet {
 	
 	private String name;
 	private Color color;
 	
-	public C01PacketLogin(String name, Color color) {
+	private int x, y;
+	
+	public C01PacketLogin(String name, Color color, int x, int y) {
 		super((byte) 1);
 		
 		this.name = name;
 		this.color = color;
+		this.x = x;
+		this.y = y;
 	}
 
 	@Override
 	public void send(DataOutputStream out) throws IOException {
 		out.writeUTF(name);
-		out.writeInt(Game.getGame().getPlayer().getX());
-		out.writeInt(Game.getGame().getPlayer().getY());
+		out.writeInt(x);
+		out.writeInt(y);
 		
 		out.writeInt(color.getRed());
 		out.writeInt(color.getGreen());

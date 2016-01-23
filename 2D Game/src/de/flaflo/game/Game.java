@@ -14,7 +14,7 @@ import de.flaflo.game.entity.PlayerMP;
 import de.flaflo.game.entity.PlayerSP;
 import de.flaflo.game.input.Keyboard;
 import de.flaflo.game.input.Mouse;
-import de.flaflo.game.networking.Connector;
+import de.flaflo.game.networking.Client;
 
 /**
  * Hauptmanagementklasse des Spiels
@@ -41,7 +41,7 @@ public class Game extends JPanel {
 
 	private GameLoop gameLoop;
 
-	private Connector connector;
+	private Client connector;
 
 	private PlayerSP player;
 
@@ -65,7 +65,7 @@ public class Game extends JPanel {
 		this.setFocusable(true);
 		this.requestFocus();
 
-		this.connector = new Connector(IP, PORT);
+		this.connector = new Client(IP, PORT);
 	}
 
 	@Override
@@ -133,7 +133,7 @@ public class Game extends JPanel {
 		return null;
 	}
 
-	public Connector getConnector() {
+	public Client getConnector() {
 		return connector;
 	}
 	

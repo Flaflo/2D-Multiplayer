@@ -28,7 +28,7 @@ import de.flaflo.game.networking.packets.Packet;
  * @author Flaflo
  *
  */
-public class Connector implements Runnable {
+public class Client implements Runnable {
 
 	private String ip;
 	private int port;
@@ -40,7 +40,7 @@ public class Connector implements Runnable {
 	
 	private Socket socket;
 	
-	public Connector(String ip, int port) {
+	public Client(String ip, int port) {
 		this.ip = ip;
 		this.port = port;
 		
@@ -119,7 +119,7 @@ public class Connector implements Runnable {
 			socket = new Socket(ip, port);
 		
 		//TODO Send Login
-		this.sendPacket(new C01PacketLogin(PlayerSP.PLAYER_NAME, PlayerSP.PLAYER_COLOR));
+		this.sendPacket(new C01PacketLogin(PlayerSP.PLAYER_NAME, PlayerSP.PLAYER_COLOR, Game.getGame().getPlayer().getX(), Game.getGame().getPlayer().getY()));
 		
 		C02PacketPlayerList listPacket = new C02PacketPlayerList();
 		listPacket.receive(new DataInputStream(socket.getInputStream()));
