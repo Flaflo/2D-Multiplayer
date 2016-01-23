@@ -1,7 +1,6 @@
 package de.flaflo.game.main;
 
-import java.net.Socket;
-import java.net.UnknownHostException;
+import java.net.Inet4Address;
 import java.time.Instant;
 import java.util.Date;
 
@@ -38,14 +37,13 @@ public class Main {
 			Game.IP = ipResult[0];
 			Game.PORT = Integer.parseInt(ipResult[1]);
 			
-			try {
-				Socket pinger = new Socket(Game.IP, Game.PORT);
-				pinger.close();
-			} catch (UnknownHostException ex1) {
-				JOptionPane.showMessageDialog(null, "Konnte Host nicht auflösen.");
+			if (!Inet4Address.getByName(Game.IP).isReachable(5000)) {
+				JOptionPane.showMessageDialog(null, "Konnte nicht zum Host verbinden.");
+				
 				initWindow();
 				return;
 			}
+		
 		} catch (Exception ex) {
 			JOptionPane.showMessageDialog(null, "Bitte gebe eine korrekte IP an.");
 			initWindow();
@@ -55,14 +53,14 @@ public class Main {
 		PlayerSP.PLAYER_NAME = JOptionPane.showInputDialog("Wähle einen Spielernamen:",
 				"Randy" + Math.abs(Game.RANDOM.nextInt()));
 
+		if (PlayerSP.PLAYER_NAME == null)
+			System.exit(0);
+		
 		if (PlayerSP.PLAYER_NAME.length() > 24) {
 			initWindow();
 			return;
 		}
 		
-		if (PlayerSP.PLAYER_NAME == null)
-			System.exit(0);
-
 		showColorChooser();
 		
 		if (PlayerSP.PLAYER_COLOR == null)

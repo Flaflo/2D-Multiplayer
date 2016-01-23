@@ -133,6 +133,10 @@ public class Game extends JPanel {
 		return null;
 	}
 
+	public Connector getConnector() {
+		return connector;
+	}
+	
 	public static Game getGame() {
 		return instance;
 	}

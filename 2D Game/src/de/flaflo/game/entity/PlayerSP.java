@@ -33,5 +33,4 @@ public class PlayerSP extends Player {
 		if (Keyboard.isKeyPressed(KeyEvent.VK_D))
 			this.setX(this.getX() + MOVEMENT_SPEED);
 	}
-
 }

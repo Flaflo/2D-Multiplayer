@@ -64,6 +64,24 @@ public class Connector implements Runnable {
 			}
 		};
 	}
+	
+	/**
+	 * Sendet ein Positions Packet an den Server
+	 * @param x X Positions auf dem Server
+	 * @param y Y Position auf dem Server
+	 */
+	public void playOutPosition(int x, int y) {
+		try {
+			DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+		
+			out.writeUTF("posUpdate");
+	
+			out.writeInt(x);
+			out.writeInt(y);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 	@Override
 	public void run() {
@@ -105,15 +123,20 @@ public class Connector implements Runnable {
 						PlayerMP playerToUpdate = Game.getGame().getPlayerByName(toUpdateName);
 						
 						if (playerToUpdate != null) {
-							playerToUpdate.setX(toUpdateX);
-							playerToUpdate.setY(toUpdateY);
+							playerToUpdate.interpolateToPosition(toUpdateX, toUpdateY);
 						}
 						
+						break;
+					case "teleport": 
+						int toX = in.readInt();
+						int toY = in.readInt();
+						
+						Game.getGame().getPlayer().teleport(toX, toY);
 						break;
 				}
 				
 			} catch (IOException e) {
-				JOptionPane.showMessageDialog(null, "Verbindung wurde vom Host getrennt");
+				JOptionPane.showMessageDialog(null, "Verbindung wurde unterbrochen:\n" + e.getMessage());
 				System.exit(0);
 			}
 		}
