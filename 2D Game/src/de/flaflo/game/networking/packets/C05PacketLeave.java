@@ -22,9 +22,9 @@ public class C05PacketLeave extends Packet {
 
 	@Override
 	public void receive(DataInputStream in) throws IOException { 
-		String name = in.readUTF();
+		int id = in.readInt();
 		
-		this.setPlayer(Game.getGame().getPlayerByName(name));
+		this.setPlayer(Game.getGame().getPlayerByID(id));
 	}
 
 	/**

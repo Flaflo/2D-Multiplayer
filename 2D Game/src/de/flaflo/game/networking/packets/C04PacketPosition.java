@@ -32,11 +32,11 @@ public class C04PacketPosition extends Packet {
 
 	@Override
 	public void receive(DataInputStream in) throws IOException {
-		String toUpdateName = in.readUTF();
+		int toUpdateId = in.readInt();
 		int toUpdateX = in.readInt();
 		int toUpdateY = in.readInt();
 		
-		this.setPlayer(Game.getGame().getPlayerByName(toUpdateName));
+		this.setPlayer(Game.getGame().getPlayerByID(toUpdateId));
 		this.setX(toUpdateX);
 		this.setY(toUpdateY);
 	}

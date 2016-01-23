@@ -8,10 +8,13 @@ public class PlayerMP extends Player {
 
 	private int polPosX, polPosY;
 
+	private int id;
+	
 	private boolean isMoving;
 
-	public PlayerMP(String name, Color color, int x, int y, int width, int height) {
+	public PlayerMP(int id, String name, Color color, int x, int y, int width, int height) {
 		super(name, color, x, y, width, height);
+		this.id = id;
 	}
 
 	public void interpolateToPosition(int x, int y) {
@@ -71,5 +74,19 @@ public class PlayerMP extends Player {
 	 */
 	public void setPolPosY(int polPosY) {
 		this.polPosY = polPosY;
+	}
+
+	/**
+	 * @return the id
+	 */
+	public int getId() {
+		return id;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(int id) {
+		this.id = id;
 	}
 }

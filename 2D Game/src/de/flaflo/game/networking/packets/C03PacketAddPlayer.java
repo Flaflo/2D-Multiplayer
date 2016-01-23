@@ -22,6 +22,7 @@ public class C03PacketAddPlayer extends Packet {
 	@Override
 	public void receive(DataInputStream in) throws IOException {
 		String toAddName = in.readUTF();
+		int id = in.readInt();
 		int toAddX = in.readInt();
 		int toAddY = in .readInt();
 		
@@ -29,7 +30,7 @@ public class C03PacketAddPlayer extends Packet {
 		int toAddGreen = in.readInt();
 		int toAddBlue = in.readInt();
 		
-		this.setPlayer(new PlayerMP(toAddName, new Color(toAddRed, toAddGreen, toAddBlue), toAddX, toAddY, Player.PLAYER_WIDTH, Player.PLAYER_HEIGHT));
+		this.setPlayer(new PlayerMP(id, toAddName, new Color(toAddRed, toAddGreen, toAddBlue), toAddX, toAddY, Player.PLAYER_WIDTH, Player.PLAYER_HEIGHT));
 	}
 
 	/**

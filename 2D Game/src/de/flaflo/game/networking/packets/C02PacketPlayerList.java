@@ -27,6 +27,7 @@ public class C02PacketPlayerList extends Packet {
 
 		for (int i = 0; i < size; i++) {
 			String pName = in.readUTF();
+			int id = in.readInt();
 			int pX = in.readInt();
 			int pY = in.readInt();
 			
@@ -34,7 +35,7 @@ public class C02PacketPlayerList extends Packet {
 			int cGreen = in.readInt();
 			int cBlue = in.readInt();
 			
-			players[i] = new PlayerMP(pName, new Color(cRed, cGreen, cBlue), pX, pY, Player.PLAYER_WIDTH, Player.PLAYER_HEIGHT);
+			players[i] = new PlayerMP(id, pName, new Color(cRed, cGreen, cBlue), pX, pY, Player.PLAYER_WIDTH, Player.PLAYER_HEIGHT);
 		}
 	}
 

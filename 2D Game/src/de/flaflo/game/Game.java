@@ -124,7 +124,7 @@ public class Game extends JPanel {
 	 * @return Spieler der gefunden wurde oder null
 	 */
 	public PlayerMP getPlayerByName(String name) {
-		for (PlayerMP p : Game.getGame().getPlayers()) {
+		for (PlayerMP p : players) {
 			if (p.getName().equals(name)) {
 				return p;
 			}
@@ -133,6 +133,14 @@ public class Game extends JPanel {
 		return null;
 	}
 
+	public PlayerMP getPlayerByID(int id) {
+		for (PlayerMP p : players)
+			if (p.getId() == id)
+				return p;
+		
+		return null;
+	}
+	
 	public Client getConnector() {
 		return connector;
 	}
