@@ -31,7 +31,7 @@ public class Main {
 	 */
 	private static void initWindow() {
 		String[] ipResult = JOptionPane.showInputDialog("IP zum Verbinden (IP:Port):",
-				"ncp.poltergeistclient.de:1338").split(":");
+				"localhost:1338").split(":");
 		
 		try {
 			Game.IP = ipResult[0];

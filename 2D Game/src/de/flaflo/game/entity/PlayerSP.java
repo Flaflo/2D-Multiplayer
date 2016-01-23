@@ -10,7 +10,7 @@ public class PlayerSP extends Player {
 
 	public static String PLAYER_NAME = "Randy" + Math.abs(Game.RANDOM.nextInt());
 	
-	public static final int MOVEMENT_SPEED = 2;
+	public static final int MOVEMENT_SPEED = 4;
 	
 	public PlayerSP(String name, Color color, int x, int y, int width, int height) {
 		super(name, color, x, y, width, height);

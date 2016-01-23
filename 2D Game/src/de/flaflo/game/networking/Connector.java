@@ -1,6 +1,5 @@
 package de.flaflo.game.networking;
 
-import java.awt.Color;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -10,10 +9,15 @@ import java.net.UnknownHostException;
 import javax.swing.JOptionPane;
 
 import de.flaflo.game.Game;
-import de.flaflo.game.entity.Player;
 import de.flaflo.game.entity.PlayerMP;
 import de.flaflo.game.entity.PlayerSP;
 import de.flaflo.game.main.Main;
+import de.flaflo.game.networking.packets.C01PacketLogin;
+import de.flaflo.game.networking.packets.C02PacketPlayerList;
+import de.flaflo.game.networking.packets.C03PacketAddPlayer;
+import de.flaflo.game.networking.packets.C04PacketPosition;
+import de.flaflo.game.networking.packets.C05PacketLeave;
+import de.flaflo.game.networking.packets.Packet;
 
 /**
  * TODO
@@ -44,45 +48,20 @@ public class Connector implements Runnable {
 		posUpdateThread = new Thread() {
 			@Override
 			public void run() {
-				try {
-					while (isRunning) {
-						DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-						
-						out.writeUTF("posUpdate");
-						out.writeInt(Game.getGame().getPlayer().getX());
-						out.writeInt(Game.getGame().getPlayer().getY());
-						
-						try {
-							Thread.sleep(100);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
+				while (isRunning) {
+					C04PacketPosition posPacket = new C04PacketPosition(Game.getGame().getPlayer().getX(), Game.getGame().getPlayer().getY());
+					sendPacket(posPacket);
+					
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
 					}
-				} catch (IOException e) {
-					e.printStackTrace();
 				}
 			}
 		};
 	}
 	
-	/**
-	 * Sendet ein Positions Packet an den Server
-	 * @param x X Positions auf dem Server
-	 * @param y Y Position auf dem Server
-	 */
-	public void playOutPosition(int x, int y) {
-		try {
-			DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-		
-			out.writeUTF("posUpdate");
-	
-			out.writeInt(x);
-			out.writeInt(y);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
 	@Override
 	public void run() {
 		isRunning = true;
@@ -93,46 +72,36 @@ public class Connector implements Runnable {
 				@SuppressWarnings("unused")
 				DataOutputStream out = new DataOutputStream(socket.getOutputStream());
 
-				String desire = in.readUTF();
+				byte id = in.readByte();
 				
-				switch (desire) {
-					case "addPlayer":
-						String toAddName = in.readUTF();
-						int toAddX = in.readInt();
-						int toAddY = in .readInt();
+				switch (id) {
+					case 2:
+						C02PacketPlayerList listPacket = new C02PacketPlayerList();
+						listPacket.receive(in);
 						
-						int toAddRed = in.readInt();
-						int toAddGreen = in.readInt();
-						int toAddBlue = in.readInt();
-						
-						Game.getGame().spawnPlayer(new PlayerMP(toAddName, new Color(toAddRed, toAddGreen, toAddBlue), toAddX, toAddY, Player.PLAYER_WIDTH, Player.PLAYER_HEIGHT));
-						
-						Main.log(toAddName + " hat das Spiel betreten.");
+						for (PlayerMP player : listPacket.getPlayers())
+							Game.getGame().spawnPlayer(player);
 						break;
-					case "removePlayer":
-						String toRemoveName = in.readUTF();
-						Game.getGame().despawnPlayer(Game.getGame().getPlayerByName(toRemoveName));
+					case 3:
+						C03PacketAddPlayer addPacket = new C03PacketAddPlayer();
+						addPacket.receive(in);
 						
-						Main.log(toRemoveName + " hat das Spiel verlassen.");
+						Game.getGame().spawnPlayer(addPacket.getPlayer());
 						break;
-					case "posUpdate":
-						String toUpdateName = in.readUTF();
-						int toUpdateX = in.readInt();
-						int toUpdateY = in.readInt();
+					case 4:
+						C04PacketPosition inPos = new C04PacketPosition();
+						inPos.receive(in);
 						
-						PlayerMP playerToUpdate = Game.getGame().getPlayerByName(toUpdateName);
-						
-						if (playerToUpdate != null) {
-							playerToUpdate.interpolateToPosition(toUpdateX, toUpdateY);
-						}
+						if (inPos.getPlayer() != null)
+							inPos.getPlayer().interpolateToPosition(inPos.getX(), inPos.getY());
 						
 						break;
-					case "teleport": 
-						int toX = in.readInt();
-						int toY = in.readInt();
+					case 5:
+						C05PacketLeave leave = new C05PacketLeave();
+						leave.receive(in);
 						
-						Game.getGame().getPlayer().teleport(toX, toY);
-						break;
+						Game.getGame().despawnPlayer(leave.getPlayer());
+					break;
 				}
 				
 			} catch (IOException e) {
@@ -151,32 +120,14 @@ public class Connector implements Runnable {
 		if (socket == null)
 			socket = new Socket(ip, port);
 		
-		DataInputStream in = new DataInputStream(socket.getInputStream());
-		DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-
-		out.writeUTF(PlayerSP.PLAYER_NAME);
-		out.writeInt(Game.getGame().getPlayer().getX());
-		out.writeInt(Game.getGame().getPlayer().getY());
+		//TODO Send Login
+		this.sendPacket(new C01PacketLogin(PlayerSP.PLAYER_NAME, PlayerSP.PLAYER_COLOR));
 		
-		Color color = PlayerSP.PLAYER_COLOR;
+		C02PacketPlayerList listPacket = new C02PacketPlayerList();
+		listPacket.receive(new DataInputStream(socket.getInputStream()));
 		
-		out.writeInt(color.getRed());
-		out.writeInt(color.getGreen());
-		out.writeInt(color.getBlue());
-
-		int size = in.readInt();
-
-		for (int i = 0; i < size; i++) {
-			String pName = in.readUTF();
-			int pX = in.readInt();
-			int pY = in.readInt();
-			
-			int cRed = in.readInt();
-			int cGreen = in.readInt();
-			int cBlue = in.readInt();
-			
-			Game.getGame().spawnPlayer(new PlayerMP(pName, new Color(cRed, cGreen, cBlue), pX, pY, Player.PLAYER_WIDTH, Player.PLAYER_HEIGHT));
-		}
+		for (PlayerMP player : listPacket.getPlayers())
+			Game.getGame().spawnPlayer(player);
 		
 		innerThread.start();
 		posUpdateThread.start();
@@ -189,6 +140,14 @@ public class Connector implements Runnable {
 			return;
 		
 		isRunning = false;
+	}
+	
+	public void sendPacket(Packet packet) {
+		try {
+			packet.send(new DataOutputStream(socket.getOutputStream()));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**

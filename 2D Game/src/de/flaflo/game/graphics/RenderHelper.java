@@ -4,8 +4,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
-import javax.swing.SwingUtilities;
-
 import de.flaflo.game.Game;
 
 public class RenderHelper {
@@ -40,7 +38,11 @@ public class RenderHelper {
 	}
 	
 	public static float getStringWidth(String str) {
-		return SwingUtilities.computeStringWidth(IMAGE_GRAPHICS.getFontMetrics(), str);
+		return IMAGE_GRAPHICS.getFontMetrics().stringWidth(str);
+	}
+	
+	public static float getStringHeight() {
+		return IMAGE_GRAPHICS.getFontMetrics().getHeight();
 	}
 	
 	public static final BufferedImage getImageBuffer() {

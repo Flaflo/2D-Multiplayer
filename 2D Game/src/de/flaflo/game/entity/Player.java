@@ -2,7 +2,6 @@ package de.flaflo.game.entity;
 
 import java.awt.Color;
 
-import de.flaflo.game.Game;
 import de.flaflo.game.graphics.RenderHelper;
 
 public abstract class Player {
@@ -42,18 +41,6 @@ public abstract class Player {
 		RenderHelper.drawRect(x, y, width, height, color);
 		RenderHelper.drawOutlineRect(x, y, width - 1, height - 1, color.darker());
 		RenderHelper.drawString(this.name, x - (int) (RenderHelper.getStringWidth(this.name) / 2) - 1, y - 4, Color.WHITE);
-	}
-	
-	/**
-	 * Teleportiert einen Spieler an Koodinaten
-	 * @param x Koordinate X des Teleportortes
-	 * @param y Koordinate Y des Teleportortes
-	 */
-	public void teleport(int x, int y) {
-		this.setX(x);
-		this.setY(y);
-		
-		Game.getGame().getConnector().playOutPosition(x, y);
 	}
 	
 	/**
