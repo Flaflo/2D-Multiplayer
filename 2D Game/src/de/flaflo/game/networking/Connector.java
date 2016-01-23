@@ -49,9 +49,7 @@ public class Connector implements Runnable {
 			@Override
 			public void run() {
 				while (isRunning) {
-					C04PacketPosition posPacket = new C04PacketPosition(Game.getGame().getPlayer().getX(), Game.getGame().getPlayer().getY());
-					sendPacket(posPacket);
-					
+					sendPacket(new C04PacketPosition(Game.getGame().getPlayer().getX(), Game.getGame().getPlayer().getY()));
 					try {
 						Thread.sleep(100);
 					} catch (InterruptedException e) {
