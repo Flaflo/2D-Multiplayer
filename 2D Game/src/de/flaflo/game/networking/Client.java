@@ -142,7 +142,9 @@ public class Client implements Runnable {
 	
 	public void sendPacket(Packet packet) {
 		try {
-			packet.send(new DataOutputStream(socket.getOutputStream()));
+			DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+			packet.send(out);
+			out.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
