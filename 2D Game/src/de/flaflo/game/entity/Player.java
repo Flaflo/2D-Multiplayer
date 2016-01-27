@@ -6,6 +6,8 @@ import de.flaflo.game.graphics.RenderHelper;
 
 public abstract class Player {
 
+	public static final int START_MASS = 5;
+	
 	public static final int PLAYER_WIDTH = 12;
 	public static final int PLAYER_HEIGHT = 12;
 	
@@ -16,6 +18,8 @@ public abstract class Player {
 	private String name;
 	
 	private int x, y, width, height;
+	
+	private int mass;
 	
 	/**
 	 * @param name Name, der über dem Spieler angezeigt wird
@@ -32,17 +36,33 @@ public abstract class Player {
 		this.y = y;
 		this.width = width;
 		this.height = height;
+		
+		this.mass = START_MASS;
 	}
 
 	/**
 	 * Rendert den Spieler auf den Screen
 	 */
 	public void render() {
-		RenderHelper.drawRect(x, y, width, height, color);
-		RenderHelper.drawOutlineRect(x, y, width - 1, height - 1, color.darker());
-		RenderHelper.drawString(this.name, x - (int) (RenderHelper.getStringWidth(this.name) / 2) - 1, y - 4, Color.WHITE);
+		RenderHelper.drawRect(getX(), getY(), getWidth(), getHeight(), color);
+		RenderHelper.drawOutlineRect(getX(), getY(), getWidth() - 1, getHeight() - 1, color.darker());
+		RenderHelper.drawString(this.name, getX() + getWidth() / 2 - (int) (RenderHelper.getStringWidth(this.name) / 2) - 1, getY() - 4, Color.WHITE);
 	}
 	
+	/**
+	 * @return the mass
+	 */
+	public int getMass() {
+		return mass;
+	}
+
+	/**
+	 * @param mass the mass to set
+	 */
+	public void setMass(int mass) {
+		this.mass = mass;
+	}
+
 	/**
 	 * @return the color
 	 */
@@ -103,7 +123,7 @@ public abstract class Player {
 	 * @return the width
 	 */
 	public int getWidth() {
-		return width;
+		return width + mass;
 	}
 
 	/**
@@ -117,7 +137,7 @@ public abstract class Player {
 	 * @return the height
 	 */
 	public int getHeight() {
-		return height;
+		return height + mass;
 	}
 
 	/**
