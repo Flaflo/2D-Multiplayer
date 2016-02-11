@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import de.flaflo.game.entity.Player;
 import de.flaflo.game.entity.PlayerMP;
 import de.flaflo.game.entity.PlayerSP;
+import de.flaflo.game.graphics.Camera;
 import de.flaflo.game.input.Keyboard;
 import de.flaflo.game.input.Mouse;
 import de.flaflo.game.networking.Client;
@@ -29,9 +30,7 @@ public class Game extends JPanel {
 	public static int PORT = 1338;
 	public static String IP = "localhost";
 
-	/**
-	 * Serialisierungs ID
-	 */
+	/** Serialisierungs ID */
 	private static final long serialVersionUID = 923915829347736711L;
 
 	public static final String TITLE = "2D Multiplayer";
@@ -41,15 +40,15 @@ public class Game extends JPanel {
 
 	private GameLoop gameLoop;
 
-	private Client connector;
+	private Camera camera;
+	
+	private Client client;
 
 	private PlayerSP player;
 
 	private CopyOnWriteArrayList<PlayerMP> players;
 
 	public Game() {
-		instance = this;
-
 		Mouse mouse = new Mouse();
 
 		this.addKeyListener(new Keyboard());
@@ -57,15 +56,17 @@ public class Game extends JPanel {
 		this.addMouseMotionListener(mouse);
 		this.addMouseWheelListener(mouse);
 
-		player = new PlayerSP(PlayerSP.PLAYER_NAME, PlayerSP.PLAYER_COLOR, WIDTH / 2, HEIGHT / 2, Player.PLAYER_WIDTH,
+		camera = new Camera();
+		camera.setBounds(0, 0, this.getWidth() - Game.WIDTH - 1, this.getHeight() - Game.HEIGHT);
+		camera.setSmoothness(0.18F);
+		player = new PlayerSP(PlayerSP.PLAYER_NAME, PlayerSP.PLAYER_COLOR, RANDOM.nextInt(WIDTH) - Player.PLAYER_WIDTH, RANDOM.nextInt(HEIGHT) - Player.PLAYER_HEIGHT, Player.PLAYER_WIDTH,
 				Player.PLAYER_HEIGHT);
 		players = new CopyOnWriteArrayList<PlayerMP>();
-
 		this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		this.setFocusable(true);
 		this.requestFocus();
 
-		this.connector = new Client(IP, PORT);
+		this.client = new Client(IP, PORT);
 	}
 
 	@Override
@@ -86,7 +87,7 @@ public class Game extends JPanel {
 		gameLoop.start();
 
 		try {
-			this.connector.connect();
+			this.client.connect();
 		} catch (UnknownHostException e) {
 			JOptionPane.showMessageDialog(null, "Konnte Host nicht auflösen.");
 			System.exit(1);
@@ -141,12 +142,18 @@ public class Game extends JPanel {
 		return null;
 	}
 	
-	public Client getConnector() {
-		return connector;
+	public Client getClient() {
+		return client;
 	}
 	
 	public static Game getGame() {
 		return instance;
+	}
+	
+	public static Game setInstance(Game game) {
+		instance = game;
+		
+		return game;
 	}
 
 	public CopyOnWriteArrayList<PlayerMP> getPlayers() {
@@ -155,5 +162,19 @@ public class Game extends JPanel {
 
 	public Player getPlayer() {
 		return player;
+	}
+
+	/**
+	 * @return the camera
+	 */
+	public Camera getCamera() {
+		return camera;
+	}
+
+	/**
+	 * @param camera the camera to set
+	 */
+	public void setCamera(Camera camera) {
+		this.camera = camera;
 	}
 }

@@ -30,7 +30,7 @@ public class Main {
 	 * Initialisiert das JFrame
 	 */
 	private static void initWindow() {
-		String[] ipResult = JOptionPane.showInputDialog("IP zum Verbinden (IP:Port):",
+		String[] ipResult = JOptionPane.showInputDialog("IP to connect (IP:Port):",
 				"ncp.poltergeistclient.de:1338").split(":");
 		
 		try {
@@ -38,19 +38,19 @@ public class Main {
 			Game.PORT = Integer.parseInt(ipResult[1]);
 			
 			if (!Inet4Address.getByName(Game.IP).isReachable(5000)) {
-				JOptionPane.showMessageDialog(null, "Konnte nicht zum Host verbinden.");
+				JOptionPane.showMessageDialog(null, "Could not connect to host.");
 				
 				initWindow();
 				return;
 			}
 		
 		} catch (Exception ex) {
-			JOptionPane.showMessageDialog(null, "Bitte gebe eine korrekte IP an.");
+			JOptionPane.showMessageDialog(null, "Please provide a valid IP.");
 			initWindow();
 			return;
 		}
 		
-		PlayerSP.PLAYER_NAME = JOptionPane.showInputDialog("Wähle einen Spielernamen:",
+		PlayerSP.PLAYER_NAME = JOptionPane.showInputDialog("Choose a Name:",
 				"Randy" + Math.abs(Game.RANDOM.nextInt()));
 
 		if (PlayerSP.PLAYER_NAME == null)
@@ -68,7 +68,7 @@ public class Main {
 
 		JFrame mainFrame = new JFrame(Game.TITLE);
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		mainFrame.setContentPane(new Game());
+		mainFrame.setContentPane(Game.setInstance(new Game()));
 		mainFrame.setLocationRelativeTo(null);
 		mainFrame.setResizable(false);
 		mainFrame.pack();
@@ -97,6 +97,7 @@ public class Main {
 	public static void showColorChooser() {
 		JColorChooser cc = new JColorChooser();
 		AbstractColorChooserPanel[] panels = cc.getChooserPanels();
+		
 		for (AbstractColorChooserPanel accp : panels) {
 			if (accp.getDisplayName().equals("HSL")) {
 				JOptionPane.showMessageDialog(null, accp);

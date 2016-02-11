@@ -15,10 +15,13 @@ public class GameLoop implements Runnable {
 	private Thread innnerThread;
 	
 	private int fps, tps;
+	private long lastTime;
 	
 	public GameLoop(Game game) {
 		this.game = game;
 		this.innnerThread = new Thread(this);
+		
+		lastTime = System.nanoTime();
 	}
 	
 	public void start() {
@@ -29,7 +32,17 @@ public class GameLoop implements Runnable {
 	}
 	
 	private void runTick() {
+		final long now = System.nanoTime();
+		final double elapsedInSeconds = (now - lastTime) / 1e9;
 		
+		//Andere Spieler
+		for (Player p : this.game.getPlayers())
+			p.update(elapsedInSeconds);
+		
+		//Spieler
+		this.game.getPlayer().update(elapsedInSeconds);
+
+		lastTime = now;
 	}
 	
 	private void runRender() {
@@ -41,13 +54,14 @@ public class GameLoop implements Runnable {
 	private void doRender() {
 		RenderHelper.clearColor(new Color(0x5A219B));
 		
+		game.getCamera().apply(RenderHelper.IMAGE_GRAPHICS);
+		
 		//Andere Spieler
 		for (Player p : this.game.getPlayers())
 			p.render();
 		
 		//Spieler
 		this.game.getPlayer().render();
-		
 		RenderHelper.drawString("FPS: " + fps, 4, (int) RenderHelper.getStringHeight(), Color.WHITE);
 	}
 	

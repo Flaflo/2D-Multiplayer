@@ -20,16 +20,14 @@ import de.flaflo.game.networking.packets.C05PacketLeave;
 import de.flaflo.game.networking.packets.Packet;
 
 /**
- * TODO
- * </br>
- * • Implement the Packet System here
- * </br>
- * • Implement Player IDs
+ * TODO Packet Positions conversition to floats
  * @author Flaflo
  *
  */
 public class Client implements Runnable {
 
+	public static final long POSITION_UPDATE_DELAY = 100L;
+	
 	private String ip;
 	private int port;
 	
@@ -49,9 +47,10 @@ public class Client implements Runnable {
 			@Override
 			public void run() {
 				while (isRunning) {
-					sendPacket(new C04PacketPosition(Game.getGame().getPlayer().getX(), Game.getGame().getPlayer().getY()));
+					sendPacket(new C04PacketPosition((int) Game.getGame().getPlayer().getX(), (int) Game.getGame().getPlayer().getY()));
+					
 					try {
-						Thread.sleep(100);
+						Thread.sleep(POSITION_UPDATE_DELAY);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
@@ -113,13 +112,12 @@ public class Client implements Runnable {
 		if (isRunning)
 			return;
 		
-		Main.log("Verbinde auf " + ip + ":" + port);
+		Main.log("Connecting to " + ip + ":" + port);
 
 		if (socket == null)
 			socket = new Socket(ip, port);
 		
-		//TODO Send Login
-		this.sendPacket(new C01PacketLogin(PlayerSP.PLAYER_NAME, PlayerSP.PLAYER_COLOR, Game.getGame().getPlayer().getX(), Game.getGame().getPlayer().getY()));
+		this.sendPacket(new C01PacketLogin(PlayerSP.PLAYER_NAME, PlayerSP.PLAYER_COLOR, (int) Game.getGame().getPlayer().getX(), (int) Game.getGame().getPlayer().getY()));
 		
 		C02PacketPlayerList listPacket = new C02PacketPlayerList();
 		listPacket.receive(new DataInputStream(socket.getInputStream()));
@@ -130,7 +128,7 @@ public class Client implements Runnable {
 		innerThread.start();
 		posUpdateThread.start();
 		
-		Main.log("Erfolgreich verbunden.");
+		Main.log("Successfully connected.");
 	}
 	
 	public synchronized void disconnect() {

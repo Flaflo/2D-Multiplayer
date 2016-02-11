@@ -9,7 +9,7 @@ public class PlayerMP extends Player {
 	private int polPosX, polPosY;
 
 	private int id;
-	
+
 	private boolean isMoving;
 
 	public PlayerMP(int id, String name, Color color, int x, int y, int width, int height) {
@@ -19,22 +19,26 @@ public class PlayerMP extends Player {
 
 	public void interpolateToPosition(int x, int y) {
 		isMoving = true;
-		
+
 		polPosX = x;
 		polPosY = y;
 	}
 
 	@Override
-	public void render() {
-		super.render();
+	public void update(double delta) {
+		super.update(delta);
 
+		move();
+	}
+
+	private void move() {
 		if (isMoving) {
 			if (this.getX() == polPosX && this.getY() == polPosY) {
 				isMoving = false;
-		
+
 				return;
 			}
-			
+
 			if (this.getX() < polPosX)
 				this.setX(this.getX() + EXPECTED_MOVEMENT_SPEED);
 			else if (this.getX() > polPosX)
@@ -45,7 +49,7 @@ public class PlayerMP extends Player {
 				this.setY(this.getY() - EXPECTED_MOVEMENT_SPEED);
 		}
 	}
-
+	
 	/**
 	 * @return the polPosX
 	 */
@@ -84,7 +88,8 @@ public class PlayerMP extends Player {
 	}
 
 	/**
-	 * @param id the id to set
+	 * @param id
+	 *            the id to set
 	 */
 	public void setId(int id) {
 		this.id = id;
