@@ -117,7 +117,7 @@ public class Client implements Runnable {
 		if (socket == null)
 			socket = new Socket(ip, port);
 		
-		this.sendPacket(new C01PacketLogin(PlayerSP.PLAYER_NAME, PlayerSP.PLAYER_COLOR, (int) Game.getGame().getPlayer().getX(), (int) Game.getGame().getPlayer().getY()));
+		this.sendPacket(new C01PacketLogin(PlayerSP.PLAYER_NAME, PlayerSP.PLAYER_COLOR, Game.getGame().getPlayer().getMass(), (int) Game.getGame().getPlayer().getX(), (int) Game.getGame().getPlayer().getY()));
 		
 		C02PacketPlayerList listPacket = new C02PacketPlayerList();
 		listPacket.receive(new DataInputStream(socket.getInputStream()));

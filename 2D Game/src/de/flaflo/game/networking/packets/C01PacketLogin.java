@@ -12,7 +12,9 @@ public class C01PacketLogin extends Packet {
 	
 	private int x, y;
 	
-	public C01PacketLogin(String name, Color color, int x, int y) {
+	private int mass;
+	
+	public C01PacketLogin(String name, Color color, int mass, int x, int y) {
 		super((byte) 1);
 		
 		this.name = name;
@@ -30,6 +32,8 @@ public class C01PacketLogin extends Packet {
 		out.writeInt(color.getRed());
 		out.writeInt(color.getGreen());
 		out.writeInt(color.getBlue());
+		
+		out.writeInt(mass);
 	}
 
 	@Override
@@ -61,5 +65,47 @@ public class C01PacketLogin extends Packet {
 	 */
 	public void setColor(Color color) {
 		this.color = color;
+	}
+
+	/**
+	 * @return the x
+	 */
+	public int getX() {
+		return x;
+	}
+
+	/**
+	 * @param x the x to set
+	 */
+	public void setX(int x) {
+		this.x = x;
+	}
+
+	/**
+	 * @return the y
+	 */
+	public int getY() {
+		return y;
+	}
+
+	/**
+	 * @param y the y to set
+	 */
+	public void setY(int y) {
+		this.y = y;
+	}
+
+	/**
+	 * @return the mass
+	 */
+	public int getMass() {
+		return mass;
+	}
+
+	/**
+	 * @param mass the mass to set
+	 */
+	public void setMass(int mass) {
+		this.mass = mass;
 	}
 }
